@@ -1,0 +1,53 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <stack>
+using namespace std;
+const int MAX = 1000000001;
+
+vector<long long int> vc;
+int p[1000001];
+int to[1000001];
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	vc.push_back(-1);
+	for (int i = 0; i < n; i++)
+	{
+		int val;
+		scanf("%d", &val);
+		vc.push_back(val);
+	}
+
+	vector<long long int> v(n + 1, MAX);
+	
+	for (int i = 1; i <= n; i++)
+	{
+		auto it = lower_bound(v.begin(), v.end(), vc[i]) - v.begin();
+		v[it] = vc[i];
+		p[it] = i;
+		to[i] = p[it - 1];
+	}
+	
+	int size = lower_bound(v.begin(), v.end(), MAX) - v.begin() - 1;
+	cout << size + 1 << endl;
+	stack<int> st;
+	st.push(p[size]);
+
+	while (st.top()) {
+		st.push(to[st.top()]);
+	}
+
+	st.pop();
+
+	while (!st.empty()) {
+		cout << vc[st.top()] << " ";
+		st.pop();
+	}
+
+
+	return 0;
+}
